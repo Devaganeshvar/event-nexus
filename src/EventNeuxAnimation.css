@@ -1,0 +1,51 @@
+@keyframes gradientAnimation {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
+  }
+  
+  .animation-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(45deg, #c6286c, #b71c1c, #d32f2f, #e57373, #d32f2f, #b71c1c);
+    background-size: 600% 600%;
+    animation: gradientAnimation 5s ease infinite;
+  }
+  
+  .text-overlay {
+    position: relative;
+  }
+  
+  .eventneux-text {
+    font-size: 6rem;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    text-align: center;
+    color: #e94e77; 
+    background: linear-gradient(45deg, #330000, #660000, #990000, #cc0000, #990000, #660000); /* Gradient background for text */
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fadeIn 2s forwards;
+    animation-delay: 2s;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  

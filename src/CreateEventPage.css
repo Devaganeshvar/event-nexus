@@ -1,0 +1,105 @@
+/* CreateEventPage.css */
+
+form {
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+}
+
+.MuiTypography-h4 {
+  font-weight: bold;
+  color: #333;
+}
+
+.MuiTextField-root {
+  margin-bottom: 1rem;
+}
+
+.MuiTextField-root .MuiInputBase-input {
+  border-radius: 4px;
+}
+
+.MuiButton-contained {
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: none;
+}
+
+.MuiButton-containedPrimary {
+  background-color: #f95b4f; /* Primary button color */
+  color: #fff;
+}
+
+.MuiButton-containedPrimary:hover {
+  background-color: #e64a43; /* Darker shade on hover */
+}
+
+.MuiButton-contained .MuiButton-startIcon {
+  margin-right: 0.5rem;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.selected-poster {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.form-container {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Grid-item {
+  padding: 0.5rem;
+}
+
+.MuiTypography-body1 {
+  color: #777;
+}
+
+.Button_root__v7mbu {
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.Button_ghost__v7mbu {
+  background-color: transparent;
+  border: 1px solid #1976d2;
+  color: #1976d2;
+}
+
+.Button_primary__v7mbu {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+}
+
+.Button_defaultSize__v7mbu {
+  padding: 8px 16px;
+}
+
+/* Styles for hover effect if needed */
+.Button_ghost__v7mbu:hover {
+  background-color: #e3f2fd;
+}
+
+.Button_primary__v7mbu:hover {
+  background-color: #1565c0;
+}
+
+.footer-container {
+  margin-top: auto;
+  padding-top: 20px;
+  background-color: #522727; /* Change this to your preferred background color */
+  color: #333; /* Change this to your preferred text color */
+  width: 100%; /* Ensure the footer takes the full width of the page */
+  box-sizing: border-box; /* Ensure padding is included in the width calculation */
+}
+
