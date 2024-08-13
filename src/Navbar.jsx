@@ -3,7 +3,8 @@ import { AppBar, Toolbar, IconButton, Typography, TextField, InputAdornment, Men
 import { Search, Notifications, LocationOn, Event, AddCircle, HelpOutline } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from './logo2.png';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons'; 
 const Navbar = () => {
   const [anchorElNotifications, setAnchorElNotifications] = React.useState(null);
   const [anchorElProfile, setAnchorElProfile] = React.useState(null);
@@ -62,7 +63,7 @@ const Navbar = () => {
             <LocationOn />
           </IconButton>
           <IconButton color="inherit" onClick={() => navigate('/find-events')}>
-            <Event />
+             <FontAwesomeIcon icon={faHeart} /> 
           </IconButton>
           <IconButton color="inherit" onClick={handleCreateEventClick}>
             <AddCircle />

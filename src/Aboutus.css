@@ -1,0 +1,67 @@
+/* Reset and global styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+  }
+  
+  /* Header styling */
+  .AboutPage-header {
+    background-image: url('D:\event-nexus\src\About.jpeg'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+  }
+  
+  /* Navbar styling */
+  .AboutPage-navbar ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .AboutPage-navbar li {
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  /* Hero section styling */
+  .AboutPage-hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Make sure this section takes full viewport height */
+    text-align: center; /* Center the text */
+  }
+  
+  .AboutPage-hero h1 {
+    font-size: 5.5rem; /* Adjust the font size as needed */
+    line-height: 1.2; /* Adjust line height for better spacing */
+    max-width: 1000px; /* Set a max-width to force the text to wrap into three lines */
+    margin: 0; /* Remove default margin */
+    word-wrap: break-word; /* Ensure the text wraps properly */
+  }
+  
+  /* Description section styling */
+  .AboutPage-description {
+    background-color: #F04A3E;
+    color: white;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .AboutPage-description p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: auto;
+  }
+  

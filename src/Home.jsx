@@ -32,6 +32,7 @@ import {faMasksTheater,faLaptop,faMedal,faUtensils,faUserTie,faPersonChalkboard 
 import { Button, IconButton, Box, Typography, Divider, Menu, MenuItem, ListItemIcon, TextField, Link, Card, CardContent, CardMedia } from '@mui/material';
 import { Category, ArrowDropDown, LocationOn, Public, ArrowBackIos, ArrowForwardIos,ArrowForward,FavoriteBorder as SaveIcon, Share as ShareIcon } from '@mui/icons-material';
 import Footer from './Footer';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const categories = ['Music', 'Art', 'Tech', 'Sports', 'Food', 'Fashion', 'WorkShops', 'Hackathons'];
 
@@ -239,67 +240,9 @@ const LinkSection = () => {
         </Box>
     );
 };
-const TrendingCard = ({ image, title, description }) => (
-    <Card 
-        sx={{ 
-            minWidth: 200, 
-            m: 2, 
-            position: 'relative', 
-            flex: '0 0 auto', 
-            width: '22%', 
-            transition: 'transform 0.3s ease-in-out', // Smooth transition for scale effect
-            '&:hover': { 
-                transform: 'scale(1.1)', // Enlarge card on hover
-                zIndex: 2, // Ensure it appears above other elements when enlarged
-            },
-            '&:hover .hover-icons': { 
-                opacity: 1 
-            }
-        }}
-    >
-        <Box sx={{ position: 'relative' }}>
-            <CardMedia
-                component="img"
-                height="150"
-                image={image}
-                alt={title}
-            />
-            <Box 
-                className="hover-icons"
-                sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                    opacity: 0,
-                    transition: 'opacity 0.3s ease-in-out',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: 2,
-                }}
-            >
-                <IconButton color="primary" sx={{ color: '#fff' }}>
-                    <SaveIcon />
-                </IconButton>
-                <IconButton color="primary" sx={{ color: '#fff' }}>
-                    <ShareIcon />
-                </IconButton>
-            </Box>
-        </Box>
-        <CardContent>
-            <Typography gutterBottom variant="h5" component="div" sx={{ fontFamily: 'Neue Plak, -apple-system, blinkmacsystemfont, roboto, Helvetica Neue, helvetica, tahoma, arial, sans-serif', fontSize: '1.75rem' }}>
-                {title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Neue Plak, -apple-system, blinkmacsystemfont, roboto, Helvetica Neue, helvetica, tahoma, arial, sans-serif', fontSize: '1.25rem' }}>
-                {description}
-            </Typography>
-        </CardContent>
-    </Card>
-);
 const TrendingSection = () => {
+    const [likedEvents, setLikedEvents] = useState([]);
+
     const trendingEvents = [
         {
             image: Musicposter,
@@ -368,7 +311,7 @@ const TrendingSection = () => {
                     stopScrolling();
                 }
             },
-            { threshold: 0.1 } // Adjust the threshold as needed
+            { threshold: 0.1 }
         );
 
         if (containerRef.current) {
@@ -442,6 +385,9 @@ const TrendingSection = () => {
                         image={event.image}
                         title={event.title}
                         description={event.description}
+                        index={index} 
+                        likedEvents={likedEvents} // Pass as prop
+                        setLikedEvents={setLikedEvents} // Pass as prop
                     />
                 ))}
             </Box>
@@ -463,6 +409,79 @@ const TrendingSection = () => {
                 <ArrowForwardIos />
             </IconButton>
         </Box>
+    );
+};
+
+const TrendingCard = ({ image, title, description, index, likedEvents, setLikedEvents }) => {
+    const navigate = useNavigate();
+
+    const handleLikeClick = () => {
+        setLikedEvents((prev) => [...prev, index]);
+        navigate('/find-events', { state: { likedEvents: [...likedEvents, index] } });
+    };
+
+    return (
+        <Card 
+            sx={{ 
+                minWidth: 200, 
+                m: 2, 
+                position: 'relative', 
+                flex: '0 0 auto', 
+                width: '22%', 
+                transition: 'transform 0.3s ease-in-out',
+                '&:hover': { 
+                    transform: 'scale(1.1)', 
+                    zIndex: 2, 
+                },
+                '&:hover .hover-icons': { 
+                    opacity: 1 
+                }
+            }}
+        >
+            <Box sx={{ position: 'relative' }}>
+                <CardMedia
+                    component="img"
+                    height="150"
+                    image={image}
+                    alt={title}
+                />
+                <Box 
+                    className="hover-icons"
+                    sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        opacity: 0,
+                        transition: 'opacity 0.3s ease-in-out',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 2,
+                    }}
+                >
+                    <IconButton color="primary" sx={{ color: '#fff' }}>
+                        <SaveIcon />
+                    </IconButton>
+                    <IconButton color="primary" sx={{ color: '#fff' }}>
+                        <ShareIcon />
+                    </IconButton>
+                    <IconButton color="primary" sx={{ color: '#fff' }} onClick={handleLikeClick}>
+                        <FontAwesomeIcon icon={faHeart} />
+                    </IconButton>
+                </Box>
+            </Box>
+            <CardContent>
+                <Typography gutterBottom variant="h5" component="div" sx={{ fontFamily: 'Neue Plak, -apple-system, blinkmacsystemfont, roboto, Helvetica Neue, helvetica, tahoma, arial, sans-serif', fontSize: '1.75rem' }}>
+                    {title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontFamily: 'Neue Plak, -apple-system, blinkmacsystemfont, roboto, Helvetica Neue, helvetica, tahoma, arial, sans-serif', fontSize: '1.25rem' }}>
+                    {description}
+                </Typography>
+            </CardContent>
+        </Card>
     );
 };
 const EventsUnder300Card = ({ image, title, description }) => (
@@ -525,7 +544,6 @@ const EventsUnder300Card = ({ image, title, description }) => (
         </CardContent>
     </Card>
 );
-
 const EventsUnder300Section = () => {
     const trendingEvents = [
         {

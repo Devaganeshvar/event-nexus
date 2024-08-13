@@ -1,0 +1,134 @@
+/* Profile.css */
+
+.account-settings-wrapper {
+    width: 60%;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 15px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .account-settings-wrapper:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-heading {
+    text-align: left;
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #333333;
+    font-weight: 800;
+    border-bottom: 2px solid #e94e77;
+    padding-bottom: 10px;
+  }
+  
+  .form-section {
+    margin-bottom: 25px;
+  }
+  
+  .form-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #555555;
+  }
+  
+  .form-input,
+  .form-select {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    border: 2px solid #dddddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    background-color: #f7f7f7;
+  }
+  
+  .form-input:focus,
+  .form-select:focus {
+    border-color: #e94e77;
+    background-color: #ffffff;
+    outline: none;
+  }
+  
+  .btn-save,
+  .btn-edit {
+    margin-top: 40px;
+    padding: 14px 25px;
+    background-color: #e94e77;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(233, 78, 119, 0.2);
+  }
+  
+  .btn-save:hover,
+  .btn-edit:hover {
+    background-color: #d04366;
+    box-shadow: 0 6px 15px rgba(233, 78, 119, 0.3);
+  }
+  
+  .view-mode-text p {
+    margin: 0;
+    padding: 12px 20px;
+    background-color: #fafafa;
+    border: 2px solid #dddddd;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #333333;
+  }
+  
+  .linked-accounts-container,
+  .email-preferences-container {
+    margin-top: 50px;
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sub-heading {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #444444;
+    font-weight: 800;
+    border-bottom: 2px solid #e94e77;
+    padding-bottom: 10px;
+  }
+  
+  .description-text {
+    color: #666666;
+    font-size: 18px;
+  }
+  
+  .social-buttons-container {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .social-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background-color: #e94e77;
+    color: white;
+    border-radius: 50%;
+    font-size: 22px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(233, 78, 119, 0.2);
+  }
+  
+  .social-button:hover {
+    background-color: #d04366;
+    box-shadow: 0 6px 15px rgba(233, 78, 119, 0.3);
+  }
+  
