@@ -12,7 +12,7 @@ const EventNeuxAnimation = () => {
     }, 3000);
 
     const navigateTimer = setTimeout(() => {
-      navigate('/');
+      navigate('/home');
     }, 6000);
 
     return () => {

@@ -20,7 +20,9 @@ const Navbar = () => {
     setAnchorElProfile(null);
     setAnchorElHelpCenter(null);
   };
-
+  const handleClosee = () => {
+    navigate('/');
+  }
   const handleProfileClick = () => {
     handleClose();
     navigate('/profile');
@@ -35,7 +37,7 @@ const Navbar = () => {
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
         <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <Link to="/home" style={{ display: 'flex', alignItems: 'center' }}>
             <IconButton edge="start" color="inherit" aria-label="logo">
               <img src={Logo} alt="EventNexus Logo" style={{ height: 20, marginTop: 2 }} />
             </IconButton>
@@ -106,7 +108,7 @@ const Navbar = () => {
             onClose={handleClose}
           >
             <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={handleClosee}>Logout</MenuItem>
           </Menu>
         </div>
       </Toolbar>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faXTwitter, faGoogle, faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import axios from 'axios'; // <-- Import axios here
 import './Login.css';
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
@@ -39,7 +39,15 @@ const LoginForm = ({ onToggleMode }) => {
       }
     }
   };
+  const [isHovered, setIsHovered] = useState(false);
 
+  const handleMouseEnter = () => {
+    setIsHovered(true); 
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false); 
+  };
   return (
     <form onSubmit={handleSubmit} className="sign-in-form">
       <h2 className="title">Sign in</h2>
@@ -73,13 +81,21 @@ const LoginForm = ({ onToggleMode }) => {
         />
       </div>
       <input type="submit" value="Login" className="btn solid" />
-      <p className="social-text">Or Sign in with social platforms</p>
-      <div className="social-media">
-        <a href="#" className="social-icon"><FontAwesomeIcon icon={faFacebookF} /></a>
-        <a href="#" className="social-icon"><FontAwesomeIcon icon={faXTwitter} /></a>
-        <a href="#" className="social-icon"><FontAwesomeIcon icon={faGoogle} /></a>
-        <a href="#" className="social-icon"><FontAwesomeIcon icon={faLinkedinIn} /></a>
-      </div>
+      <a
+        href="#"
+        style={{
+          display: 'block',
+          marginTop: '10px',
+          textAlign: 'center',
+          color: isHovered ? '#e94e77' : '#333', 
+          textDecoration: isHovered ? 'underline' : 'none',
+          cursor: 'pointer', 
+        }}
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave} 
+      >
+        <Link to="/forgotpassword">Forgot your password?</Link>
+      </a>
     </form>
   );
 };

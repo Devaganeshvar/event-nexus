@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { format } from 'date-fns';
 import './Admin.css';
 
 const AdminPage = () => {
   const [registrations, setRegistrations] = useState([]);
+  const [eventRequests, setEventRequests] = useState([]); 
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [activeSection, setActiveSection] = useState('registrations');
   const [selectedRegistration, setSelectedRegistration] = useState(null);
   const [newRegistrationData, setNewRegistrationData] = useState({});
@@ -19,6 +22,9 @@ const AdminPage = () => {
       try {
         const registrationResponse = await axios.get('http://localhost:8080/get');
         setRegistrations(registrationResponse.data);
+
+        const eventRequestResponse = await axios.get('http://localhost:8080/events'); 
+        setEventRequests(eventRequestResponse.data);
       } catch (error) {
         setError('There was an error fetching data!');
         console.error(error);
@@ -31,7 +37,7 @@ const AdminPage = () => {
   }, []);
 
   const handleLogout = () => {
-    navigate('/login');
+    navigate('/');
   };
 
   const handleUpdate = async (id) => {
@@ -63,10 +69,49 @@ const AdminPage = () => {
     }
   };
 
+  const handleEventRequestAction = async (id, action) => {
+    try {
+      const response = await axios.post(`http://localhost:8080/events/${action}/${id}`);
+      if (response.status === 200) {
+        const updatedRequests = eventRequests.filter(req => req.id !== id);
+        setEventRequests(updatedRequests);
+      } else {
+        setError('Action failed');
+      }
+    } catch (error) {
+      setError('There was an error processing the event request!');
+      console.error(error);
+    }
+  };
+
+  const handleViewEventDetails = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/events/${id}`);
+      if (response.status === 200) {
+        console.log(response.data); // Inspect the data
+        setSelectedEvent(response.data);
+        setActiveSection('eventDetails');
+      } else {
+        setError('Failed to fetch event details');
+      }
+    } catch (error) {
+      setError('There was an error fetching event details!');
+      console.error(error);
+    }
+  };
+  
+
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return 'Invalid date'; // Handle null or undefined
+    const date = new Date(dateTimeString);
+    if (isNaN(date.getTime())) return 'Invalid date'; // Handle invalid date
+    return format(date, 'yyyy-MM-dd HH:mm:ss'); // Adjust format as needed
+  };
+
   const renderSection = () => {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
-
+  
     switch (activeSection) {
       case 'registrations':
         return (
@@ -120,10 +165,49 @@ const AdminPage = () => {
             )}
           </section>
         );
+      case 'eventRequests':
+        return (
+          <section className="admin-section">
+            <h2>Event Requests</h2>
+            <ul>
+              {eventRequests.length > 0 ? (
+                eventRequests.map((request) => (
+                  <li key={request.id}>
+                    Event: {request.eventName}, Status: {request.status}
+                    <button onClick={() => handleEventRequestAction(request.id, 'approve')}>Approve</button>
+                    <button onClick={() => handleEventRequestAction(request.id, 'reject')}>Reject</button>
+                    <button onClick={() => handleEventRequestAction(request.id, 'waiting')}>Set to Waiting</button>
+                    <button onClick={() => handleViewEventDetails(request.id)}>View Details</button>
+                  </li>
+                ))
+              ) : (
+                <li>No event requests available</li>
+              )}
+            </ul>
+          </section>
+        );
+      case 'eventDetails':
+        return (
+          <section className="admin-section">
+            <h2>Event Details</h2>
+            {selectedEvent ? (
+              <div>
+                <p><strong>Event Name:</strong> {selectedEvent.eventName}</p>
+                <p><strong>Description:</strong> {selectedEvent.description}</p>
+                <p><strong>Start Time:</strong> {formatDateTime(selectedEvent.startTime)}</p>
+                <p><strong>End Time:</strong> {formatDateTime(selectedEvent.endTime)}</p>
+                <p><strong>Status:</strong> {selectedEvent.status}</p>
+                <button onClick={() => setActiveSection('eventRequests')}>Back to Requests</button>
+              </div>
+            ) : (
+              <p>No event selected</p>
+            )}
+          </section>
+        );
       default:
         return <section className="admin-section"><h2>Select a section</h2></section>;
     }
-  };
+  };  
 
   return (
     <div className="admin-page-container">
@@ -140,6 +224,12 @@ const AdminPage = () => {
               onClick={() => setActiveSection('registrations')}
             >
               Registrations
+            </li>
+            <li
+              className={activeSection === 'eventRequests' ? 'active' : ''}
+              onClick={() => setActiveSection('eventRequests')}
+            >
+              Event Requests
             </li>
           </ul>
         </aside>

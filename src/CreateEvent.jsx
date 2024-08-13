@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Grid, InputAdornment } from '@mui/material';
+import { TextField, Button, Typography, Grid, InputAdornment, MenuItem, Switch, FormControlLabel } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faGlobe, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { useLoadScript, Autocomplete } from '@react-google-maps/api';
+import axios from 'axios';
 import './CreateEventPage.css';
+import EventFooter from './CreateEventFooter';
 
 const libraries = ['places'];
 
@@ -25,6 +27,8 @@ const CreateEventPage = () => {
     eventVenue: '',
     meetingLink: '',
     showAdditionalFields: false,
+    category: '', 
+    isFree: false, // New state for free tickets
   });
 
   const [posterPreview, setPosterPreview] = useState(null);
@@ -53,10 +57,48 @@ const CreateEventPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(eventData);
-  };
+    
+    // Log the event data to the console for debugging
+    console.log('Submitting event data:', eventData);
+    
+    // Check if the required fields are filled
+    if (!eventData.eventName || !eventData.date || !eventData.startTime || !eventData.endTime || !eventData.price || !eventData.seatLimit) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    
+    try {
+      // Create a new FormData object
+      const formData = new FormData();
+    
+      // Append the event data to the FormData object
+      Object.keys(eventData).forEach((key) => {
+        if (key === 'poster' && eventData.poster) {
+          formData.append('poster', eventData.poster);
+        } else {
+          formData.append(key, eventData[key]);
+        }
+      });
+    
+      // Send a POST request to the backend API with the FormData object
+      axios.post('http://localhost:8080/events', eventData, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    
+      // Log the response data
+      
+    
+      // Show a success message
+      alert('Event created successfully!');
+    } catch (error) {
+      console.error('There was an error creating the event!', error);
+      alert('Event creation failed');
+    }
+  };  
 
   const handleLocationChange = (newLocation) => {
     setEventData((prevData) => ({
@@ -78,6 +120,14 @@ const CreateEventPage = () => {
     setEventData((prevData) => ({
       ...prevData,
       showAdditionalFields: true,
+    }));
+  };
+
+  const handleSwitchChange = (e) => {
+    setEventData((prevData) => ({
+      ...prevData,
+      isFree: e.target.checked,
+      price: e.target.checked ? '' : prevData.price,
     }));
   };
 
@@ -127,6 +177,29 @@ const CreateEventPage = () => {
             required
           />
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            label="Category"
+            name="category"
+            value={eventData.category}
+            onChange={handleChange}
+            fullWidth
+            select
+            required
+          >
+            <MenuItem value="Music">Music</MenuItem>
+            <MenuItem value="Technical">Technical</MenuItem>
+            <MenuItem value="Cultural">Cultural</MenuItem>
+            <MenuItem value="Art">Art</MenuItem>
+            <MenuItem value="Conference">Conference</MenuItem>
+            <MenuItem value="Workshop">Workshop</MenuItem>
+            <MenuItem value="Webinar">Webinar</MenuItem>
+            <MenuItem value="Networking">Networking</MenuItem>
+            <MenuItem value="Hackathon">Hackathon</MenuItem>
+            <MenuItem value="Dance">Dance</MenuItem>
+            <MenuItem value="Other">Other...</MenuItem>
+          </TextField>
+        </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             label="Event Date"
@@ -174,7 +247,7 @@ const CreateEventPage = () => {
                 fullWidth
                 startIcon={<FontAwesomeIcon icon={faMapMarkerAlt} />}
                 onClick={() => handleLocationChange('Venue')}
-                className="Button_root__v7mbu Button_ghost__v7mbu"
+                color="primary"
               >
                 Venue
               </Button>
@@ -185,7 +258,7 @@ const CreateEventPage = () => {
                 fullWidth
                 startIcon={<FontAwesomeIcon icon={faGlobe} />}
                 onClick={() => handleLocationChange('Online Event')}
-                className="Button_root__v7mbu Button_primary__v7mbu"
+                color="primary"
               >
                 Online Event
               </Button>
@@ -196,7 +269,7 @@ const CreateEventPage = () => {
                 fullWidth
                 startIcon={<FontAwesomeIcon icon={faQuestionCircle} />}
                 onClick={() => handleLocationChange('To Be Announced')}
-                className="Button_root__v7mbu Button_ghost__v7mbu"
+                color="primary"
               >
                 To Be Announced
               </Button>
@@ -231,15 +304,16 @@ const CreateEventPage = () => {
             </Autocomplete>
             {!eventData.showAdditionalFields && (
               <Button
-                variant="text"
+                variant="outlined"
                 onClick={handleAddLocationDetails}
-                className="Button_root__v7mbu Button_ghost__v7mbu"
+                color="primary"
+                fullWidth
               >
-                Add location details
+                Add Address Details
               </Button>
             )}
             {eventData.showAdditionalFields && (
-              <Grid container spacing={2} style={{ marginTop: 16 }}>
+              <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="Street Address"
@@ -260,16 +334,6 @@ const CreateEventPage = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Event Venue"
-                    name="eventVenue"
-                    value={eventData.eventVenue}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
               </Grid>
             )}
           </Grid>
@@ -283,38 +347,39 @@ const CreateEventPage = () => {
               value={eventData.meetingLink}
               onChange={handleChange}
               fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FontAwesomeIcon icon={faGlobe} />
-                  </InputAdornment>
-                ),
-              }}
+              helperText="Provide the link for online meetings"
               required
             />
           </Grid>
         )}
 
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Price"
-            name="price"
-            type="number"
-            value={eventData.price}
-            onChange={handleChange}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  ₹
-                </InputAdornment>
-              ),
-            }}
-            required
+        <Grid item xs={12}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={eventData.isFree}
+                onChange={handleSwitchChange}
+                color="primary"
+              />
+            }
+            label="Free Event"
           />
+          {!eventData.isFree && (
+            <TextField
+              label="Price"
+              name="price"
+              type="number"
+              value={eventData.price}
+              onChange={handleChange}
+              fullWidth
+              InputProps={{
+                startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+              }}
+              required
+            />
+          )}
         </Grid>
-
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <TextField
             label="Seat Limit"
             name="seatLimit"
@@ -325,41 +390,27 @@ const CreateEventPage = () => {
             required
           />
         </Grid>
-
         <Grid item xs={12}>
-          <input
-            accept="image/*"
-            style={{ display: 'none' }}
-            id="poster-upload"
-            type="file"
-            onChange={handleFileChange}
-          />
-          <label htmlFor="poster-upload">
-            <Button variant="contained" color="primary" component="span">
-              Upload Poster
-            </Button>
-          </label>
+          <Button variant="contained" component="label">
+            Upload Poster
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={handleFileChange}
+            />
+          </Button>
           {posterPreview && (
             <div style={{ marginTop: 16 }}>
-              <img src={posterPreview} alt="Event Poster Preview" style={{ width: '100%', maxHeight: '300px', objectFit: 'cover' }} />
+              <img src={posterPreview} alt="Event Poster" style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           )}
         </Grid>
-
-        <Grid item xs={12} className="footer-container">
-  <Grid container spacing={2} justifyContent="space-between">
-    <Grid item xs={12} sm={6}>
-      <Button variant="contained" fullWidth>
-        Exit
-      </Button>
-    </Grid>
-    <Grid item xs={12} sm={6}>
-      <Button variant="contained" color="primary" type="submit" fullWidth>
-        Create Event
-      </Button>
-    </Grid>
-  </Grid>
-</Grid>
+        <Grid item xs={12}>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Create Event
+          </Button>
+        </Grid>
       </Grid>
     </form>
   );
